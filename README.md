@@ -1,2 +1,2 @@
-# diggy
- serverless stateless hashing discord exploration bot
+# Prospector
+serverless stateless cryptographic hashing discord exploration bot
