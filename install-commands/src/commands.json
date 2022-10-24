@@ -1,0 +1,14 @@
+{
+	"command_list": [
+		{
+			"name": "dig",
+			"type": 1,
+			"description": "With a shovel!"
+		},
+		{
+			"name": "convoke",
+			"type": 1,
+			"description": "Will anything happen?"
+		}
+	]
+}

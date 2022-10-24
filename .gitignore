@@ -127,3 +127,4 @@ dist
 .pnp.*
 
 */build
+install-commands/src/secrets.json
