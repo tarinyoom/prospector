@@ -1,0 +1,6 @@
+name = "prospector"
+main = "src/index.ts"
+compatibility_date = "2022-10-24"
+node_compat = true
+[vars]
+PUBLIC_KEY = "c2c69b45c68051dcf949ab9fe21789d4803b9f68e064519cd2db5dc1e306bc62"
