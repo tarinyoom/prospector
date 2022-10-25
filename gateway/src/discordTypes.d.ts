@@ -1,4 +1,4 @@
-interface Interaction {
+interface InteractionRequest {
     "type": number,
     "token": string,
     "member": {
@@ -34,5 +34,5 @@ interface Interaction {
         "name": string,
         "id": string
     },
-    "channel_id": "645027906669510667"
+    "channel_id": string
 }

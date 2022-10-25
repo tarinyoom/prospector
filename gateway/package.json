@@ -12,6 +12,7 @@
     "deploy": "wrangler publish"
   },
   "dependencies": {
+    "crypto-hash": "^2.0.1",
     "discord-interactions": "^3.2.0"
   }
 }

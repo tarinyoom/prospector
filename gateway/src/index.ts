@@ -7,7 +7,7 @@ export interface Env {
 } 
 
 async function evaluateVerifiedRequest(request: Request) : Promise<Response> {
-	return request.json<Interaction>().then((interaction) => {
+	return request.json<InteractionRequest>().then((interaction) => {
 		if (interaction.type === InteractionType.PING) {
 			console.log("returning pong");
 			return getJSONResponse({"type": InteractionResponseType.PONG});
@@ -19,8 +19,7 @@ async function evaluateVerifiedRequest(request: Request) : Promise<Response> {
 export default {
 	async fetch(
 		request: Request,
-		env: Env,
-		ctx: ExecutionContext
+		env: Env
 	): Promise<Response> {
 		const signature = request.headers.get('X-Signature-Ed25519');
 		const timestamp = request.headers.get('X-Signature-Timestamp');

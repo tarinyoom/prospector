@@ -1,0 +1,16 @@
+{
+	"symbolType": "noun",
+	"startByte": 0,
+	"endByte": 1,
+	"requires": null,
+	"values": [
+		{
+			"value": "temple",
+			"n": 150
+		},
+		{
+			"value": "cavern",
+			"n": 200
+		}
+	]
+}
