@@ -6,9 +6,9 @@
 			"description": "With a shovel!"
 		},
 		{
-			"name": "convoke",
+			"name": "poke",
 			"type": 1,
-			"description": "Will anything happen?"
+			"description": "Poke someone and find out..."
 		}
 	]
 }
