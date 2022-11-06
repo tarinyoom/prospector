@@ -1,18 +1,22 @@
+/**
+ * Layer between http requests and Discord-formatted JSON objects.
+ */
+
 import { verifyKey, InteractionType, InteractionResponseType } from "discord-interactions";
-import { getJSONResponse } from "./utils";
 import { handleInteraction } from "./handler";
 
 export interface Env {
 	PUBLIC_KEY: string
 } 
 
-async function evaluateVerifiedRequest(request: Request) : Promise<Response> {
-	return request.json<InteractionRequest>().then((interaction) => {
-		if (interaction.type === InteractionType.PING) {
-			console.log("returning pong");
-			return getJSONResponse({"type": InteractionResponseType.PONG});
-		}
-		return handleInteraction(interaction);
+async function getResponseJSON(request: Request) : Promise<Response> {
+	return request.json<InteractionRequest>().then(async (interaction) => {
+		const json = JSON.stringify(await handleInteraction(interaction), null, 2);
+		return new Response(json, {
+			headers: {
+				'content-type': 'application/json;charset=UTF-8'
+			}
+		});
 	});
 }
 
@@ -28,7 +32,7 @@ export default {
 			if (signature != null && timestamp != null) {
 				const verified = verifyKey(body, signature, timestamp, env.PUBLIC_KEY);
 				if (verified) {
-					return evaluateVerifiedRequest(request);
+					return getResponseJSON(request);
 				}
 			}
 			console.error("Could not verify request");

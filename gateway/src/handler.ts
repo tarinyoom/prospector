@@ -1,11 +1,18 @@
-export { handleInteraction as handleInteraction };
+/**
+ * Layer between Discord-formatted JSON objects and game logic. 
+ */
 
-import { getJSONResponse } from "./utils";
-import { InteractionResponseType, InteractionResponseFlags } from 'discord-interactions';
+import { InteractionResponseType, InteractionResponseFlags, InteractionType } from 'discord-interactions';
 import { handleDig } from './game/dig';
 import { handlePoke } from './game/poke';
 
-async function handleInteraction(interaction: InteractionRequest) : Promise<Response> {
+export async function handleInteraction(interaction: InteractionRequest) : Promise<Object> {
+
+	if (interaction.type == InteractionType.PING) {
+		return { 
+			type: InteractionResponseType.PONG
+		};
+	}
 
 	// TODO: augment this to handle more than just a one-string response
 	let responseMsg: string = "No response.";
@@ -22,7 +29,7 @@ async function handleInteraction(interaction: InteractionRequest) : Promise<Resp
 			break;
 	}
 
-	return getJSONResponse({
+	return {
 		"type": InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
 		"data": {
 			"tts": false,
@@ -31,5 +38,5 @@ async function handleInteraction(interaction: InteractionRequest) : Promise<Resp
 			"embeds": [],
 			"allowed_mentions": { "parse": [] }
 		}
-	});
+	};
 }
