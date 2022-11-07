@@ -1,12 +1,13 @@
 import { GetHash } from "./utils/hashing";
-import byteLore from "./rules/placeLore.json";
+import placeLore from "./rules/placeLore.json";
+const lore = placeLore as LoreByteLookup;
 
 export async function handleDig(guild_id: string, channel_id: string) : Promise<string> {
-	return "Found: " + await stringifyName(GetFullName(channel_id, "test", byteLore));
+	return "Found: " + await stringifyName(GetFullName(channel_id, "test", lore));
 }
 
-async function GetFullName(id: string, type: string, lore: LoreByteLookup) : Promise<FullName> {
-	const hash = GetHash([id], type);
+async function GetFullName(id: string, type: string, lore: LoreByteLookup) : Promise<PlaceName> {
+	const hash = (await GetHash([id]))[0];
 
 	const nounVal = parseInt(await (await hash).substring(2 * lore.startByte, 2 * lore.endByte), 16);
 
@@ -15,12 +16,11 @@ async function GetFullName(id: string, type: string, lore: LoreByteLookup) : Pro
 		"The Unknowable Void");
 
 	return {
-		base: {
-			noun: noun
-		}
+		noun: noun,
+		adjectives: []
 	}
 }
 
-async function stringifyName(name: Promise<FullName>) : Promise<string> {
-	return (await name).base.noun; // TODO fill this out
+async function stringifyName(name: Promise<PlaceName>) : Promise<string> {
+	return (await name).noun; // TODO fill this out
 }
