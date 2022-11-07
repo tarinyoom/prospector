@@ -1,16 +1,45 @@
 {
-	"symbolType": "noun",
+	"symbolType": "base",
 	"startByte": 0,
 	"endByte": 1,
-	"requires": null,
 	"values": [
 		{
-			"value": "temple",
+			"value": "statue",
+			"n": 100
+		},
+		{
+			"value": "cave",
 			"n": 150
 		},
 		{
-			"value": "cavern",
+			"value": "temple",
 			"n": 200
+		}
+	],
+	"children": [
+		{
+			"symbolType": "adjective",
+			"startByte": 1,
+			"endByte": 2,
+			"values": [
+				{
+					"value": "red",
+					"n": 64
+				},
+				{
+					"value": "blue",
+					"n": 128
+				},
+				{
+					"value": "yellow",
+					"n": 192
+				},
+				{
+					"value": "blellow",
+					"n": 256
+				}
+			],
+			"children": []
 		}
 	]
 }
