@@ -9,29 +9,24 @@ const lore = placeLore as LoreEntry;
  * @param channel_id The ID of the channel being dug in
  * @returns a string response
  */
+export async function handleDig(guild_id: string | undefined,
+	                            channel_id: string | undefined,
+								args: string | undefined) : Promise<GameResponse> {
 
-export async function dig(request: GameRequest) : Promise<GameResponse> {
-
-	const name = request.guildId != undefined ?
-		await getPlaceName(request.guildId, request.channelId) : null;
+	const name = guild_id != undefined && channel_id != undefined ? await getPlaceName(guild_id, channel_id) : null;
 	const nameString = stringifyName(name);
 
-	let userData = request.playerData;
-
-	if (request.param) {
+	if (args) {
 
 		let msg;
 		if (name?.children[0] != null) {
 			msg = `Perhaps you could bring a ${name.children[0].value} person to this ${nameString}...`;
-
 		} else {
 			msg = `There isn't anything remarkable here, it seems.`;
 		}
 		return {
-			userId: request.userId,
 			"msg": msg,
-			"buttons": [],
-			"playerData": userData
+			"buttons": []
 		};
 	} else {
 
@@ -42,15 +37,13 @@ export async function dig(request: GameRequest) : Promise<GameResponse> {
 			msg = `You dig, and find a ${nameString}!`;
 		}
 		return {
-			userId: request.userId,
 			"msg": msg,
 			"buttons": [
 				{
 					"text": "Ponder",
 					"stage": `dig;followup`
 				}
-			],
-			playerData: userData
+			]
 		};
 	}
 }

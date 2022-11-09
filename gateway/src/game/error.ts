@@ -1,8 +1,6 @@
-export async function error() : Promise<GameResponse> {
+export async function handleError() : Promise<GameResponse> {
 	return {
-		"userId": "",
 		"msg": "Error handling your request.",
-		"buttons": [],
-		"playerData": null
+		"buttons": []
 	}
 }
