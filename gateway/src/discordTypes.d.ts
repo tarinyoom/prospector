@@ -1,38 +1,15 @@
+type Snowflake = string;
+
+interface InteractionData {
+    id: Snowflake,
+    name: string,
+    custom_id?: string
+}
+
 interface InteractionRequest {
-    "type": number,
-    "token": string,
-    "member": {
-        "user": {
-            "id": string,
-            "username": string,
-            "avatar": string,
-            "discriminator": string,
-            "public_flags": number
-        },
-        "roles": string[],
-        "premium_since": string,
-        "permissions": string,
-        "pending": boolean,
-        "nick": string,
-        "mute": boolean,
-        "joined_at": string,
-        "is_pending": boolean,
-        "deaf": boolean
-    },
-    "id": string,
-    "guild_id": string,
-    "app_permissions": string,
-    "guild_locale": string,
-    "locale": string,
-    "data": {
-        "options": {
-            "type": number,
-            "name": string,
-            "value": string
-        }[],
-        "type": number,
-        "name": string,
-        "id": string
-    },
-    "channel_id": string
+    id: Snowflake,
+    channel_id?: Snowflake,
+    guild_id?: Snowflake,
+    type: number,
+    data?: InteractionData,
 }

@@ -2,7 +2,7 @@
  * Layer between http requests and Discord-formatted JSON objects.
  */
 
-import { verifyKey, InteractionType, InteractionResponseType } from "discord-interactions";
+import { verifyKey } from "discord-interactions";
 import { handleInteraction } from "./handler";
 
 export interface Env {
