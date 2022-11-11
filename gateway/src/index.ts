@@ -6,12 +6,13 @@ import { verifyKey } from "discord-interactions";
 import { handleInteraction } from "./handler";
 
 export interface Env {
-	PUBLIC_KEY: string
+	PUBLIC_KEY: string;
+	USER_STATE: KVNamespace;
 } 
 
-async function getResponseJSON(request: Request) : Promise<Response> {
+async function getResponseJSON(request: Request, userState: KVNamespace) : Promise<Response> {
 	return request.json<InteractionRequest>().then(async (interaction) => {
-		const json = JSON.stringify(await handleInteraction(interaction), null, 2);
+		const json = JSON.stringify(await handleInteraction(interaction, userState), null, 2);
 		return new Response(json, {
 			headers: {
 				'content-type': 'application/json;charset=UTF-8'
@@ -25,6 +26,7 @@ export default {
 		request: Request,
 		env: Env
 	): Promise<Response> {
+
 		const signature = request.headers.get('X-Signature-Ed25519');
 		const timestamp = request.headers.get('X-Signature-Timestamp');
 
@@ -32,7 +34,7 @@ export default {
 			if (signature != null && timestamp != null) {
 				const verified = verifyKey(body, signature, timestamp, env.PUBLIC_KEY);
 				if (verified) {
-					return getResponseJSON(request);
+					return getResponseJSON(request, env.USER_STATE);
 				}
 			}
 			console.error("Could not verify request");
