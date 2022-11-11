@@ -18,9 +18,24 @@ interface Name {
 }
 
 interface GameResponse {
+	userId: string,
 	msg: string,
 	buttons: {
 		text: string,
 		stage: string
-	}[]
+	}[],
+	userData: UserData | null
+}
+
+interface UserData {
+	discovered: string[]
+}
+
+interface GameRequest {
+	action: string,
+	param?: string,
+	userId: string,
+	channelId: string,
+	guildId?: string,
+	userData: UserData | null
 }

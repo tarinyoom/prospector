@@ -12,4 +12,14 @@ interface InteractionRequest {
     guild_id?: Snowflake,
     type: number,
     data?: InteractionData,
+    user?: User,
+    member?: Member
+}
+
+interface User {
+    id: string
+}
+
+interface Member {
+    user?: User
 }
