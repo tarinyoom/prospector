@@ -4,13 +4,16 @@
 
 import { InteractionResponseType, InteractionResponseFlags, InteractionType } from 'discord-interactions';
 import { getUserData, setUserData } from './data';
+import { formatBlock } from './formatting';
 import { dig } from './game/dig';
-import { error } from './game/error';
 import { poke } from './game/poke';
+import { stats } from './game/stats';
+import { error } from './game/error';
 
 const BACKEND_API = new Map<string, (request: GameRequest) => Promise<GameResponse>>([
 	["dig", dig],
-	["poke", poke]
+	["poke", poke],
+	["stats", stats]
 ])
 
 async function runGame(request: GameRequest) : Promise<GameResponse> {
@@ -69,11 +72,13 @@ async function processGameResponse(gameResponse: GameResponse, userState: KVName
 			"components": buttons
 		}];
 
+	const message = gameResponse.blockMsg ? formatBlock(gameResponse.blockMsg) : gameResponse.msg;
+
 	return {
 		"type": InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
 		"data": {
 			"tts": false,
-			"content": gameResponse.msg,
+			"content": message,
 			"components": components,
 			"flags": InteractionResponseFlags.EPHEMERAL,
 			"embeds": [],

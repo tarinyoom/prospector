@@ -1,4 +1,4 @@
-import { GetHash } from "./utils/hashing";
+import { getHash } from "./utils/hashing";
 import placeLore from "./rules/placeLore.json";
 import { getNameObject } from "./utils/naming";
 const lore = placeLore as LoreEntry;
@@ -63,7 +63,7 @@ export async function dig(request: GameRequest) : Promise<GameResponse> {
 }
 
 async function getPlaceName(guild_id: string, channel_id: string) : Promise<Name> {
-	const hash : string = (await GetHash([channel_id]))[0];
+	const hash : string = (await getHash([channel_id]))[0];
 	const name : Name = getNameObject(hash, lore);
 	return name;
 }
