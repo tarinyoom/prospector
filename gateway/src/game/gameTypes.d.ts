@@ -1,17 +1,18 @@
-interface LoreNameValues {
+interface LoreValues {
 	value: string,
 	n: number
 }
 
-interface LoreByteLookup {
+interface LoreEntry {
 	symbolType: string,
 	startByte: number,
 	endByte: number,
-	requires: string?,
-	values: LoreNameValues[]
+	values: LoreNameValues[],
+	children: LoreEntry[]
 }
 
-interface PlaceName {
-    noun: string,
-	adjectives: string[]
+interface Name {
+	symbolType: string,
+	value: string,
+	children: Name[]
 }
