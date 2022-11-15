@@ -1,6 +1,7 @@
 function buildBlankPlayerProfile() {
 	return {
-		level: 0
+		level: 1,
+		activated: []
 	}
 }
 

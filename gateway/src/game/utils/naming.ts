@@ -1,3 +1,16 @@
+import { getHash } from "./hashing";
+
+export async function getPersonName(user_id: string, lore: LoreEntry) : Promise<PersonName> {
+	const hash : string = await getHash([user_id]);
+	const name = getNameObject<PersonName>(hash, lore);
+	return name;
+}
+
+export async function getPlaceName(guild_id: string, channel_id: string, lore: LoreEntry) : Promise<PlaceName> {
+	const hash : string = await getHash([channel_id, guild_id]);
+	const name = getNameObject<PlaceName>(hash, lore);
+	return name;
+}
 
 /**
  * Builds the name of an entity from a passed hash string value. The passed
@@ -8,7 +21,7 @@
  * @param entry A recursive description of the naming scheme
  * @returns An object representing the name's syntax tree
  */
-export function getNameObject(hash: string, entry: LoreEntry) : Name {
+function getNameObject<T extends Name>(hash: string, entry: LoreEntry) : T {
 
 	const n = parseInt(hash.substring(2 * entry.startByte, 2 * entry.endByte), 16);
 
@@ -26,5 +39,5 @@ export function getNameObject(hash: string, entry: LoreEntry) : Name {
 		children: children
 	};
 
-	return name;
+	return name as T;
 }

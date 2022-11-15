@@ -1,7 +1,9 @@
 import { getHash } from "./utils/hashing";
+import { getPlaceName, getPersonName } from "./utils/naming";
 import placeLore from "./rules/placeLore.json";
-import { getNameObject } from "./utils/naming";
-const lore = placeLore as LoreEntry;
+import personLore from "./rules/personLore.json";
+const places = placeLore as LoreEntry;
+const people = personLore as LoreEntry;
 
 /**
  * Top level dig function.
@@ -11,61 +13,65 @@ const lore = placeLore as LoreEntry;
  */
 export async function dig(request: GameRequest) : Promise<GameResponse> {
 
-	const name = request.guildId != undefined ?
-		await getPlaceName(request.guildId, request.channelId) : null;
-	const nameString = stringifyName(name);
+	const place = request.guildId != undefined ?
+		await getPlaceName(request.guildId, request.channelId, places) : null;
+	const person = await getPersonName(request.userId, people);
 
-	let userData = request.userData;
-	if (nameString) {
-		if (!userData) {
-			userData = {
-				discovered: []
-			}
-		}
-		userData?.discovered.push(nameString);
-	}
+	const placeString = stringifyName(place);
+
+	let playerData = request.playerData;
+	let msg: string = "";
+	let buttons: {text: string, stage: string}[] = [];
 
 	if (request.param) {
 
-		let msg;
-		if (name?.children[0] != null) {
-			msg = `Perhaps you could bring a ${name.children[0].value} person to this ${nameString}...`;
-
-		} else {
-			msg = `There isn't anything remarkable here, it seems.`;
+		if (place != null) {
+			switch (request.param) {
+				case "activate":
+					msg = `You activate the ${placeString}. You level up!`;
+					playerData.level += 1;
+					playerData.activated.push(request.channelId);
+					break;
+				case "followup":
+					msg = `Perhaps you could bring a ${place.children[0].value} person to this ${placeString}...`;
+					break;
+			}
 		}
-		return {
-			userId: request.userId,
-			"msg": msg,
-			"buttons": [],
-			"userData": userData
-		};
 	} else {
-
-		let msg;
-		if (name === null || name.value === null) {
+		if (place === null || place.value === null) {
 			msg = `You dig, and find nothing interesting...`;
 		} else {
-			msg = `You dig, and find a ${nameString}!`;
+			console.log(`player activated is ${JSON.stringify(request.playerData)}`);
+			const activated = request.playerData.activated.includes(request.channelId);
+			msg = `You dig, and find a${activated ? "n activated" : ""} ${placeString}!`;
+			if (!activated && matchElement(place, person)) {
+				buttons = [
+					{
+						text: "Activate",
+						stage: "dig;activate"
+					}
+				]
+			} else if (!activated) {
+				buttons = [
+					{
+						text: "Ponder",
+						stage: "dig;followup"
+					}
+				]
+			}
 		}
-		return {
-			userId: request.userId,
-			"msg": msg,
-			"buttons": [
-				{
-					"text": "Ponder",
-					"stage": `dig;followup`
-				}
-			],
-			userData: userData
-		};
 	}
+
+	return {
+		userId: request.userId,
+		msg: msg,
+		buttons: buttons,
+		playerData: playerData
+	};
 }
 
-async function getPlaceName(guild_id: string, channel_id: string) : Promise<Name> {
-	const hash : string = (await getHash([channel_id]))[0];
-	const name : Name = getNameObject(hash, lore);
-	return name;
+function matchElement(place: PlaceName, person: Name) {
+	return place.children[0].value == person.children[0].value;
 }
 
 /**

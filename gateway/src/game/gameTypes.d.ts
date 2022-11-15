@@ -17,6 +17,30 @@ interface Name {
 	children: Name[]
 }
 
+interface PlaceName extends Name {
+	symbolType: "base",
+	value: string,
+	children: [
+		{
+			symbolType: "adjective",
+			value: string,
+			children: []
+		}
+	]
+}
+
+interface PersonName extends Name {
+	symbolType: "base",
+	value: string,
+	children: [
+		{
+			symbolType: "adjective",
+			value: string,
+			children: []
+		}
+	]
+}
+
 interface GameResponse {
 	userId: string,
 	msg?: string,
@@ -42,9 +66,10 @@ interface GameRequest {
 	userId: string,
 	channelId: string,
 	guildId?: string,
-	playerData: PlayerData | null
+	playerData: PlayerData
 }
 
 interface PlayerData {
 	level: number
+	activated: string[]
 }
