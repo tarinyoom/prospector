@@ -4,16 +4,20 @@
 	"endByte": 1,
 	"values": [
 		{
-			"value": "statue",
-			"n": 100
+			"value": "adjudicator",
+			"n": 64
 		},
 		{
-			"value": "cave",
-			"n": 150
+			"value": "champion",
+			"n": 128
 		},
 		{
-			"value": "temple",
-			"n": 200
+			"value": "elder",
+			"n": 192
+		},
+		{
+			"value": "invoker",
+			"n": 256 
 		}
 	],
 	"children": [

@@ -18,9 +18,33 @@ interface Name {
 }
 
 interface GameResponse {
-	msg: string,
+	userId: string,
+	msg?: string,
+	blockMsg?: BlockData,
 	buttons: {
 		text: string,
 		stage: string
+	}[],
+	playerData: PlayerData | null
+}
+
+interface BlockData {
+	heading: string,
+	contents: {
+		key: string,
+		value: string
 	}[]
+}
+
+interface GameRequest {
+	action: string,
+	param?: string,
+	userId: string,
+	channelId: string,
+	guildId?: string,
+	playerData: PlayerData | null
+}
+
+interface PlayerData {
+	level: number
 }

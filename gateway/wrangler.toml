@@ -2,5 +2,11 @@ name = "prospector"
 main = "src/index.ts"
 compatibility_date = "2022-10-24"
 node_compat = true
+
+kv_namespaces = [
+  { binding = "PLAYER_STATE", id = "e817b46da5a34439b2e82e31ffbe909e", preview_id="c9bfe5b691c34037ad8976dd44c59ac7" }
+]
+
 [vars]
 PUBLIC_KEY = "c2c69b45c68051dcf949ab9fe21789d4803b9f68e064519cd2db5dc1e306bc62"
+USE_PLAYER_STATE = true

@@ -6,6 +6,11 @@
 			"description": "With a shovel!"
 		},
 		{
+			"name": "stats",
+			"type": 1,
+			"description": "See your stats."
+		},
+		{
 			"name": "poke",
 			"type": 1,
 			"description": "Poke someone and find out..."
