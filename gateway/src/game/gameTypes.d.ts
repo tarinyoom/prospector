@@ -16,3 +16,11 @@ interface Name {
 	value: string,
 	children: Name[]
 }
+
+interface GameResponse {
+	msg: string,
+	buttons: {
+		text: string,
+		stage: string
+	}[]
+}
