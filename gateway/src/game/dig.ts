@@ -9,6 +9,7 @@ const lore = placeLore as LoreEntry;
  * @param channel_id The ID of the channel being dug in
  * @returns a string response
  */
+
 export async function handleDig(guild_id: string | undefined,
 	                            channel_id: string | undefined,
 								args: string | undefined) : Promise<GameResponse> {
