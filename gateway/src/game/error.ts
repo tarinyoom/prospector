@@ -3,6 +3,6 @@ export async function error() : Promise<GameResponse> {
 		"userId": "",
 		"msg": "Error handling your request.",
 		"buttons": [],
-		"userData": null
+		"playerData": null
 	}
 }

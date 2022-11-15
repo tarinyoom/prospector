@@ -3,7 +3,7 @@
  */
 
 import { InteractionResponseType, InteractionResponseFlags, InteractionType } from 'discord-interactions';
-import { GetUserData, SetUserData } from './data';
+import { getUserData, setUserData } from './data';
 import { dig } from './game/dig';
 import { error } from './game/error';
 import { poke } from './game/poke';
@@ -23,7 +23,7 @@ async function runGame(request: GameRequest) : Promise<GameResponse> {
 	}
 }
 
-async function buildGameRequest(interaction: InteractionRequest, userState: KVNamespace) : Promise<GameRequest> {
+async function buildGameRequest(interaction: InteractionRequest, userState: KVNamespace | null) : Promise<GameRequest> {
 
 	let action = interaction.data?.name;
 	let param;
@@ -38,23 +38,21 @@ async function buildGameRequest(interaction: InteractionRequest, userState: KVNa
 	}
 
 	const userId = interaction.user?.id ?? interaction.member?.user?.id;
-	const userData = await GetUserData(userState, userId);
+	const userData = await getUserData(userState, userId);
 
 	return {
 		action: action ?? "error",
 		param: param,
 		userId: userId ?? "no user found",
-		userData: userData,
+		playerData: userData,
 		channelId: interaction.channel_id ?? "error",
 		guildId: interaction.guild_id
 	}	
 }
 
-async function processGameResponse(gameResponse: GameResponse, userState: KVNamespace) : Promise<Object> {
+async function processGameResponse(gameResponse: GameResponse, userState: KVNamespace | null) : Promise<Object> {
 
-	if (gameResponse.userData) {
-		SetUserData(userState, "3", gameResponse.userData);
-	}
+	setUserData(userState, gameResponse.userId, gameResponse.playerData);
 
 	const buttons = gameResponse.buttons.map((button: {text: string, stage: string}) => {
 		return {
@@ -84,7 +82,7 @@ async function processGameResponse(gameResponse: GameResponse, userState: KVName
 	};
 }
 
-export async function handleInteraction(interaction: InteractionRequest, userState: KVNamespace) : Promise<Object> {
+export async function handleInteraction(interaction: InteractionRequest, userState: KVNamespace | null) : Promise<Object> {
 
 	if (interaction.type == InteractionType.PING) {
 		return { 

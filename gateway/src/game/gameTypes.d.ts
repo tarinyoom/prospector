@@ -24,11 +24,11 @@ interface GameResponse {
 		text: string,
 		stage: string
 	}[],
-	userData: UserData | null
+	playerData: PlayerData | null
 }
 
-interface UserData {
-	discovered: string[]
+interface PlayerData {
+	level: number
 }
 
 interface GameRequest {
@@ -37,5 +37,5 @@ interface GameRequest {
 	userId: string,
 	channelId: string,
 	guildId?: string,
-	userData: UserData | null
+	playerData: PlayerData | null
 }

@@ -16,15 +16,7 @@ export async function dig(request: GameRequest) : Promise<GameResponse> {
 		await getPlaceName(request.guildId, request.channelId) : null;
 	const nameString = stringifyName(name);
 
-	let userData = request.userData;
-	if (nameString) {
-		if (!userData) {
-			userData = {
-				discovered: []
-			}
-		}
-		userData?.discovered.push(nameString);
-	}
+	let userData = request.playerData;
 
 	if (request.param) {
 
@@ -39,7 +31,7 @@ export async function dig(request: GameRequest) : Promise<GameResponse> {
 			userId: request.userId,
 			"msg": msg,
 			"buttons": [],
-			"userData": userData
+			"playerData": userData
 		};
 	} else {
 
@@ -58,7 +50,7 @@ export async function dig(request: GameRequest) : Promise<GameResponse> {
 					"stage": `dig;followup`
 				}
 			],
-			userData: userData
+			playerData: userData
 		};
 	}
 }

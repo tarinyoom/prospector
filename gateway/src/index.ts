@@ -7,10 +7,11 @@ import { handleInteraction } from "./handler";
 
 export interface Env {
 	PUBLIC_KEY: string;
-	USER_STATE: KVNamespace;
+	USE_PLAYER_STATE: boolean;
+	PLAYER_STATE: KVNamespace;
 } 
 
-async function getResponseJSON(request: Request, userState: KVNamespace) : Promise<Response> {
+async function getResponseJSON(request: Request, userState: KVNamespace | null) : Promise<Response> {
 	return request.json<InteractionRequest>().then(async (interaction) => {
 		const json = JSON.stringify(await handleInteraction(interaction, userState), null, 2);
 		return new Response(json, {
@@ -26,7 +27,7 @@ export default {
 		request: Request,
 		env: Env
 	): Promise<Response> {
-
+		
 		const signature = request.headers.get('X-Signature-Ed25519');
 		const timestamp = request.headers.get('X-Signature-Timestamp');
 
@@ -34,7 +35,7 @@ export default {
 			if (signature != null && timestamp != null) {
 				const verified = verifyKey(body, signature, timestamp, env.PUBLIC_KEY);
 				if (verified) {
-					return getResponseJSON(request, env.USER_STATE);
+					return getResponseJSON(request, env.USE_PLAYER_STATE ? env.PLAYER_STATE : null);
 				}
 			}
 			console.error("Could not verify request");

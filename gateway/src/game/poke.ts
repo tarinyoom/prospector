@@ -10,6 +10,6 @@ export async function poke(request: GameRequest) : Promise<GameResponse> {
 				"stage": "followup string to send on button callback"
 			}
 		],
-		"userData": null
+		"playerData": null
 	};
 }

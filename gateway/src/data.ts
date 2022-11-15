@@ -1,22 +1,23 @@
-const USE_STATE: boolean = false;
+function buildBlankPlayerProfile() {
+	return {
+		level: 0
+	}
+}
 
-export async function GetUserData(database: KVNamespace, userId: string | undefined) : Promise<UserData> {
-	if (userId && USE_STATE) {
+export async function getUserData(database: KVNamespace | null, userId: string | undefined) : Promise<PlayerData> {
+	if (database && userId) {
 		const userDataString = await database.get(userId);
 		if (userDataString) {
-			const userData: UserData = JSON.parse(await userDataString);
+			const userData: PlayerData = JSON.parse(await userDataString);
 			return userData;
 		}
 	}
 
-	return {
-		discovered: []
-	}
+	return buildBlankPlayerProfile();
 }
 
-export async function SetUserData(database: KVNamespace, userId: string, data: UserData) {
-	if (USE_STATE) {
-		console.log(`adding ${JSON.stringify(data)}`);
+export async function setUserData(database: KVNamespace | null, userId: string, data: PlayerData | null) {
+	if (database && data) {
 		return await database.put(userId, JSON.stringify(data));
 	}
 }
