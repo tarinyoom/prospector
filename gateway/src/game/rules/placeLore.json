@@ -1,45 +1,65 @@
-{
-	"symbolType": "base",
-	"startByte": 0,
-	"endByte": 1,
-	"values": [
-		{
-			"value": "statue",
-			"n": 100
-		},
-		{
-			"value": "cave",
-			"n": 150
-		},
-		{
-			"value": "temple",
-			"n": 200
-		}
-	],
-	"children": [
-		{
-			"symbolType": "adjective",
-			"startByte": 1,
-			"endByte": 2,
-			"values": [
-				{
-					"value": "fire",
-					"n": 64
-				},
-				{
-					"value": "water",
-					"n": 128
-				},
-				{
-					"value": "earth",
-					"n": 192
-				},
-				{
-					"value": "air",
-					"n": 256
+[
+	{
+		"symbolType": "building",
+		"startByte": 0,
+		"endByte": 1,
+		"values": [
+			{
+				"n": 100,
+				"value": {
+					"name": "statue",
+					"requiredLevel": 1
 				}
-			],
-			"children": []
-		}
-	]
-}
+			},
+			{
+				"n": 150,
+				"value": {
+					"name": "relic",
+					"requiredLevel": 1
+				}
+			},
+			{
+				"n": 200,
+				"value": {
+					"name": "temple",
+					"requiredLevel": 3
+				}
+			}
+		]
+	},
+	{
+		"symbolType": "stone",
+		"startByte": 1,
+		"endByte": 2,
+		"values": [
+			{
+				"n": 64,
+				"value": {
+					"name": "jade",
+					"requiredLevel": 2
+				}
+			},
+			{
+				"n": 128,
+				"value": {
+					"name": "quartz",
+					"requiredLevel": 2
+				}
+			},
+			{
+				"n": 192,
+				"value": {
+					"name": "agate",
+					"requiredLevel": 2
+				}
+			},
+			{
+				"n": 256,
+				"value": {
+					"name": "pyrite",
+					"requiredLevel": 2
+				}
+			}
+		]
+	}
+]

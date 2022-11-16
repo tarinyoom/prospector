@@ -1,44 +1,23 @@
-interface LoreValues {
-	value: string,
-	n: number
+interface TraitValue {
+	name: string,
+	requiredLevel: number
+}
+
+interface LoreChoice {
+	n: number,
+	value: TraitValue
 }
 
 interface LoreEntry {
 	symbolType: string,
 	startByte: number,
 	endByte: number,
-	values: LoreNameValues[],
-	children: LoreEntry[]
+	values: LoreChoice[]
 }
 
-interface Name {
+interface Trait {
 	symbolType: string,
-	value: string,
-	children: Name[]
-}
-
-interface PlaceName extends Name {
-	symbolType: "base",
-	value: string,
-	children: [
-		{
-			symbolType: "adjective",
-			value: string,
-			children: []
-		}
-	]
-}
-
-interface PersonName extends Name {
-	symbolType: "base",
-	value: string,
-	children: [
-		{
-			symbolType: "adjective",
-			value: string,
-			children: []
-		}
-	]
+	value: TraitValue | null
 }
 
 interface GameResponse {
@@ -56,7 +35,7 @@ interface BlockData {
 	heading: string,
 	contents: {
 		key: string,
-		value: string
+		value?: string
 	}[]
 }
 

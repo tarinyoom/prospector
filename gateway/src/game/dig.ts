@@ -1,9 +1,8 @@
-import { getHash } from "./utils/hashing";
-import { getPlaceName, getPersonName } from "./utils/naming";
-import placeLore from "./rules/placeLore.json";
-import personLore from "./rules/personLore.json";
-const places = placeLore as LoreEntry;
-const people = personLore as LoreEntry;
+import { getTraits } from "./utils/naming";
+import PLACE_LORE from "./rules/placeLore.json";
+import PERSON_LORE from "./rules/personLore.json";
+const PLACES = PLACE_LORE as LoreEntry[];
+const PEOPLE = PERSON_LORE as LoreEntry[];
 
 /**
  * Top level dig function.
@@ -14,8 +13,8 @@ const people = personLore as LoreEntry;
 export async function dig(request: GameRequest) : Promise<GameResponse> {
 
 	const place = request.guildId != undefined ?
-		await getPlaceName(request.guildId, request.channelId, places) : null;
-	const person = await getPersonName(request.userId, people);
+		await getTraits([request.channelId, request.guildId], PLACES) : null;
+	const person = await getTraits([request.userId], PEOPLE);
 
 	const placeString = stringifyName(place);
 
@@ -33,18 +32,18 @@ export async function dig(request: GameRequest) : Promise<GameResponse> {
 					playerData.activated.push(request.channelId);
 					break;
 				case "followup":
-					msg = `Perhaps you could bring a ${place.children[0].value} person to this ${placeString}...`;
+					msg = `FOLLOWUP BROKEN`;
 					break;
 			}
 		}
 	} else {
-		if (place === null || place.value === null) {
+		if (place === null) {
 			msg = `You dig, and find nothing interesting...`;
 		} else {
 			console.log(`player activated is ${JSON.stringify(request.playerData)}`);
 			const activated = request.playerData.activated.includes(request.channelId);
 			msg = `You dig, and find a${activated ? "n activated" : ""} ${placeString}!`;
-			if (!activated && matchElement(place, person)) {
+			if (true) {
 				buttons = [
 					{
 						text: "Activate",
@@ -70,25 +69,18 @@ export async function dig(request: GameRequest) : Promise<GameResponse> {
 	};
 }
 
-function matchElement(place: PlaceName, person: Name) {
-	return place.children[0].value == person.children[0].value;
-}
-
 /**
  * Converts A Name object into a string to be displayed to the user. 
  * @param name The javascript object representing the full name of an entity
  * @returns A string representation of that name
  */
 // TODO: move this to naming.ts with a shared logic for stringifying names in general
-export function stringifyName(name: Name | null) : string | null {
-
-	if (name === null) {
-		return null;
-	} else if (name.value === null) {
-		return "nothing interesting";
-	} else if (name.children[0].value === null) {
-		return `${name.value}`;
+export function stringifyName(traits: Trait[] | null) : string | null {
+	if (traits) {
+		return traits.map((trait: Trait) => {
+			return trait.value?.name;
+		}).reverse().join(" ");
 	} else {
-		return `${name.children[0].value} ${name.value}`;
+		return null;
 	}
 }

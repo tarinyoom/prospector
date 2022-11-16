@@ -1,43 +1,30 @@
 import { getHash } from "./hashing";
 
-export async function getPersonName(user_id: string, lore: LoreEntry) : Promise<PersonName> {
-	const hash : string = await getHash([user_id]);
-	const name = getNameObject<PersonName>(hash, lore);
-	return name;
-}
-
-export async function getPlaceName(guild_id: string, channel_id: string, lore: LoreEntry) : Promise<PlaceName> {
-	const hash : string = await getHash([channel_id, guild_id]);
-	const name = getNameObject<PlaceName>(hash, lore);
-	return name;
-}
-
 /**
  * Builds the name of an entity from a passed hash string value. The passed
  * hash string value can be from any source, as long as the corresponding
  * LoreEntry is appropriately formatted.
  * 
- * @param hash The hash value to be converted to a name
- * @param entry A recursive description of the naming scheme
- * @returns An object representing the name's syntax tree
+ * @param ids List of traits to be hashed
+ * @param entry An array description of the naming scheme
+ * @returns An array object representing the traits associated with the inputs
  */
-function getNameObject<T extends Name>(hash: string, entry: LoreEntry) : T {
+export async function getTraits(ids: string[], entries: LoreEntry[]): Promise<Trait[]>{
+	
+	const hash : string = await getHash(ids);
 
-	const n = parseInt(hash.substring(2 * entry.startByte, 2 * entry.endByte), 16);
+	return entries.map((entry: LoreEntry) => {
 
-	const value = entry.values.reduceRight(
-		(prev : string | null, curr : LoreValues) => curr.n > n ? curr.value : prev, 
-		null);
+		const n = parseInt(hash.substring(2 * entry.startByte, 2 * entry.endByte), 16);
 
-	const children = value != null ? entry.children.map(
-		(child: LoreEntry) => getNameObject(hash, child))
-		: [];
+		const value: TraitValue | null = entry.values.reduceRight(
+			(prev : TraitValue | null, curr : LoreChoice) => curr.n > n ? curr.value : prev, 
+			null);
 
-	const name = {
-		symbolType: entry.symbolType,
-		value: value,
-		children: children
-	};
+		return {
+			symbolType: entry.symbolType,
+			value: value
+		}
 
-	return name as T;
+	});
 }
