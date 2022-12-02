@@ -8,5 +8,6 @@ kv_namespaces = [
 ]
 
 [vars]
-PUBLIC_KEY = "c2c69b45c68051dcf949ab9fe21789d4803b9f68e064519cd2db5dc1e306bc62"
-USE_PLAYER_STATE = true
+BOT_PUBLIC_KEY = "c2c69b45c68051dcf949ab9fe21789d4803b9f68e064519cd2db5dc1e306bc62"
+USE_PLAYER_STATE = false
+HASH_KEY = "make this private at some point"

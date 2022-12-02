@@ -1,8 +1,4 @@
 import { getTraits } from "./utils/naming";
-import PLACE_LORE from "./rules/placeLore.json";
-import PERSON_LORE from "./rules/personLore.json";
-const PLACES = PLACE_LORE as LoreEntry[];
-const PEOPLE = PERSON_LORE as LoreEntry[];
 
 /**
  * Top level dig function.
@@ -13,8 +9,15 @@ const PEOPLE = PERSON_LORE as LoreEntry[];
 export async function dig(request: GameRequest) : Promise<GameResponse> {
 
 	const place = request.guildId != undefined ?
-		await getTraits([request.channelId, request.guildId], PLACES) : null;
-	const person = await getTraits([request.userId], PEOPLE);
+		await getTraits(
+			[request.channelId, request.guildId], 
+			request.gameLore.placeLore, request.hashKey)
+		: null;
+
+	const person = await getTraits(
+		[request.userId],
+		request.gameLore.personLore,
+		request.hashKey);
 
 	const placeString = stringifyName(place);
 

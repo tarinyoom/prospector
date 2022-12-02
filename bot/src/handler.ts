@@ -9,6 +9,8 @@ import { dig } from './game/dig';
 import { poke } from './game/poke';
 import { stats } from './game/stats';
 import { error } from './game/error';
+import PLACE_LORE from "./game/rules/placeLore.json";
+import PERSON_LORE from "./game/rules/personLore.json";
 
 const BACKEND_API = new Map<string, (request: GameRequest) => Promise<GameResponse>>([
 	["dig", dig],
@@ -26,7 +28,10 @@ async function runGame(request: GameRequest) : Promise<GameResponse> {
 	}
 }
 
-async function buildGameRequest(interaction: InteractionRequest, userState: KVNamespace | null) : Promise<GameRequest> {
+async function buildGameRequest(interaction: InteractionRequest,
+	                            userState: KVNamespace | null,
+								gameLore: GameLore,
+								hashKey: string) : Promise<GameRequest> {
 
 	let action = interaction.data?.name;
 	let param;
@@ -46,10 +51,18 @@ async function buildGameRequest(interaction: InteractionRequest, userState: KVNa
 	return {
 		action: action ?? "error",
 		param: param,
-		userId: userId ?? "no user found",
 		playerData: userData,
-		channelId: interaction.channel_id ?? "error",
-		guildId: interaction.guild_id
+
+		/* 
+		 * userId, channelId, and guildId are lightly salted to guarantee
+		 * uniqueness across all users, channels, and guilds.
+		 */
+		userId: "u" + userId,
+		channelId: "c" + interaction.channel_id,
+		guildId: "g" + interaction.guild_id,
+
+		gameLore: gameLore,
+		hashKey: hashKey
 	}	
 }
 
@@ -87,7 +100,9 @@ async function processGameResponse(gameResponse: GameResponse, userState: KVName
 	};
 }
 
-export async function handleInteraction(interaction: InteractionRequest, userState: KVNamespace | null) : Promise<Object> {
+export async function handleInteraction(interaction: InteractionRequest,
+										userState: KVNamespace | null,
+										hashKey: string) : Promise<Object> {
 
 	if (interaction.type == InteractionType.PING) {
 		return { 
@@ -95,7 +110,12 @@ export async function handleInteraction(interaction: InteractionRequest, userSta
 		};
 	}
 
-	return buildGameRequest(interaction, userState)
+	const gameLore = {
+		personLore: PERSON_LORE,
+		placeLore: PLACE_LORE
+	}
+
+	return buildGameRequest(interaction, userState, gameLore, hashKey)
 		.then(runGame)
 		.then((value: GameResponse) => processGameResponse(value, userState));
 }

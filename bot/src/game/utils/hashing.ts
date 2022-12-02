@@ -5,12 +5,12 @@ import { sha256 } from 'crypto-hash';
  * @param ids list of IDs to hash
  * @returns a cryptographically secure hash based on the passed ids
  */
-export async function getHash(ids: string[]): Promise<string> {
-	return (await getHashes(ids)).join("");
+export async function getHash(ids: string[], key: string): Promise<string> {
+	return (await getHashes(ids, key)).join("");
 }
 
-async function getHashes(ids: string[]) : Promise<string[]> {
+async function getHashes(ids: string[], key: string) : Promise<string[]> {
 	return Promise.all(ids.map(async (id) => {
-		return sha256(id + "test"); // TODO change this to an unguessable secret
+		return sha256(key + id);
 	}));
 }

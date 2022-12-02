@@ -3,16 +3,19 @@ interface TraitValue {
 	requiredLevel: number
 }
 
-interface LoreChoice {
-	n: number,
-	value: TraitValue
-}
-
 interface LoreEntry {
 	symbolType: string,
 	startByte: number,
 	endByte: number,
-	values: LoreChoice[]
+	values: {
+		n: number,
+		value: TraitValue
+	}[]
+}
+
+interface GameLore {
+	personLore: LoreEntry[],
+	placeLore: LoreEntry[]
 }
 
 interface Trait {
@@ -45,7 +48,9 @@ interface GameRequest {
 	userId: string,
 	channelId: string,
 	guildId?: string,
-	playerData: PlayerData
+	playerData: PlayerData,
+	gameLore: GameLore,
+	hashKey: string
 }
 
 interface PlayerData {

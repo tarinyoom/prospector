@@ -1,11 +1,12 @@
 import { getTraits } from "./utils/naming";
 import CONSTANTS from "./utils/constants.json";
-import PERSON_LORE from "./rules/personLore.json";
-const PEOPLE = PERSON_LORE as LoreEntry[];
 
 export async function stats(request: GameRequest) : Promise<GameResponse> {
 
-	const name = await getTraits([request.userId], PEOPLE);
+	const name = await getTraits(
+		[request.userId],
+		request.gameLore.personLore,
+		request.hashKey);
 
 	return {
 		userId: request.userId,
