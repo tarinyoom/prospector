@@ -11,13 +11,8 @@ export async function dig(request: GameRequest) : Promise<GameResponse> {
 	const place = request.guildId != undefined ?
 		await getTraits(
 			[request.channelId, request.guildId], 
-			request.gameLore.placeLore, request.hashKey)
+			request.gameLore.placeLore, request.hashKey, request.playerData.level)
 		: null;
-
-	const person = await getTraits(
-		[request.userId],
-		request.gameLore.personLore,
-		request.hashKey);
 
 	const placeString = stringifyName(place);
 
@@ -40,10 +35,9 @@ export async function dig(request: GameRequest) : Promise<GameResponse> {
 			}
 		}
 	} else {
-		if (place === null) {
+		if (!place || place.length == 0) {
 			msg = `You dig, and find nothing interesting...`;
 		} else {
-			console.log(`player activated is ${JSON.stringify(request.playerData)}`);
 			const activated = request.playerData.activated.includes(request.channelId);
 			msg = `You dig, and find a${activated ? "n activated" : ""} ${placeString}!`;
 			if (true) {
@@ -74,15 +68,19 @@ export async function dig(request: GameRequest) : Promise<GameResponse> {
 
 /**
  * Converts A Name object into a string to be displayed to the user. 
- * @param name The javascript object representing the full name of an entity
+ * @param name The string representing the full name of an entity
  * @returns A string representation of that name
  */
 // TODO: move this to naming.ts with a shared logic for stringifying names in general
 export function stringifyName(traits: Trait[] | null) : string | null {
 	if (traits) {
-		return traits.map((trait: Trait) => {
-			return trait.value?.name;
-		}).reverse().join(" ");
+		if (traits.length > 0) {
+			return traits.map((trait: Trait) => {
+				return trait.value?.name;
+			}).reverse().join(" ");	
+		} else {
+			return "nothing";
+		}
 	} else {
 		return null;
 	}

@@ -9,22 +9,31 @@ import { getHash } from "./hashing";
  * @param entry An array description of the naming scheme
  * @returns An array object representing the traits associated with the inputs
  */
-export async function getTraits(ids: string[], entries: LoreEntry[], key: string): Promise<Trait[]>{
+export async function getTraits(ids: string[], entries: LoreEntry[], key: string, level: number): Promise<Trait[]>{
 	
 	const hash : string = await getHash(ids, key);
 
-	return entries.map((entry: LoreEntry) => {
+	const symbolsPresent = new Set();
+	const traits: Trait[] = [];
 
-		const n = parseInt(hash.substring(2 * entry.startByte, 2 * entry.endByte), 16);
-
-		const value: TraitValue | null = entry.values.reduceRight(
-			(prev : TraitValue | null, curr : { n: number, value: TraitValue}) => curr.n > n ? curr.value : prev, 
-			null);
-
-		return {
-			symbolType: entry.symbolType,
-			value: value
+	entries.forEach((entry: LoreEntry) => {
+		if (!entry.requires || symbolsPresent.has(entry.requires)) {
+			const n = parseInt(hash.substring(2 * entry.startByte, 2 * entry.endByte), 16);
+			const value: TraitValue | null = entry.values.reduceRight(
+				(
+					prev : TraitValue | null, 
+					curr : { n: number, value: TraitValue }) => curr.n > n && level >= curr.value.requiredLevel ? curr.value : prev, 
+					null);
+			
+				if (value) {
+					traits.push({
+						symbolType: entry.symbolType,
+						value: value
+					});
+					symbolsPresent.add(entry.symbolType);
+				}
 		}
-
 	});
+
+	return traits;
 }

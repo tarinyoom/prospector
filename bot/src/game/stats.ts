@@ -6,7 +6,7 @@ export async function stats(request: GameRequest) : Promise<GameResponse> {
 	const name = await getTraits(
 		[request.userId],
 		request.gameLore.personLore,
-		request.hashKey);
+		request.hashKey, request.playerData.level);
 
 	return {
 		userId: request.userId,

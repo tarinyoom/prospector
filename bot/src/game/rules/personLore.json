@@ -3,6 +3,7 @@
 		"symbolType":"specialization",
 		"startByte":0,
 		"endByte":1,
+		"requires":null,
 		"values":[
 			{"n":64,"value":{"name":"jade","requiredLevel":2}},
 			{"n":128,"value":{"name":"quartz","requiredLevel":2}},

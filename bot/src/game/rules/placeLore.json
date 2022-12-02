@@ -3,6 +3,7 @@
 		"symbolType":"building",
 		"startByte":0,
 		"endByte":1,
+		"requires": null,
 		"values":[
 			{"n":100,"value":{"name":"statue","requiredLevel":1}},
 			{"n":150,"value":{"name":"relic","requiredLevel":1}},
@@ -13,6 +14,7 @@
 		"symbolType":"stone",
 		"startByte":1,
 		"endByte":2,
+		"requires":"building",
 		"values":[
 			{"n":64,"value":{"name":"jade","requiredLevel":2}},
 			{"n":128,"value":{"name":"quartz","requiredLevel":2}},

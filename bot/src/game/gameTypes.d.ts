@@ -7,6 +7,7 @@ interface LoreEntry {
 	symbolType: string,
 	startByte: number,
 	endByte: number,
+	requires: string?,
 	values: {
 		n: number,
 		value: TraitValue
