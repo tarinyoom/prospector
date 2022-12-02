@@ -46,7 +46,12 @@ async function buildGameRequest(interaction: InteractionRequest,
 	}
 
 	const userId = interaction.user?.id ?? interaction.member?.user?.id;
-	const userData = await getUserData(userState, userId);
+
+	const requestUserId = "u" + userId;
+	const requestChannelId = "c" + interaction.channel_id;
+	const requestGuildId = "g" + interaction.guild_id;
+
+	const userData = await getUserData(userState, requestUserId);
 
 	return {
 		action: action ?? "error",
@@ -57,9 +62,9 @@ async function buildGameRequest(interaction: InteractionRequest,
 		 * userId, channelId, and guildId are lightly salted to guarantee
 		 * uniqueness across all users, channels, and guilds.
 		 */
-		userId: "u" + userId,
-		channelId: "c" + interaction.channel_id,
-		guildId: "g" + interaction.guild_id,
+		userId: requestUserId,
+		channelId: requestChannelId,
+		guildId: requestGuildId,
 
 		gameLore: gameLore,
 		hashKey: hashKey

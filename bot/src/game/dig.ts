@@ -29,8 +29,8 @@ export async function dig(request: GameRequest) : Promise<GameResponse> {
 					playerData.level += 1;
 					playerData.activated.push(request.channelId);
 					break;
-				case "followup":
-					msg = `FOLLOWUP BROKEN`;
+				case "ponder":
+					msg = `You ponder. What could lie in the future?`;
 					break;
 			}
 		}
@@ -39,19 +39,19 @@ export async function dig(request: GameRequest) : Promise<GameResponse> {
 			msg = `You dig, and find nothing interesting...`;
 		} else {
 			const activated = request.playerData.activated.includes(request.channelId);
-			msg = `You dig, and find a${activated ? "n activated" : ""} ${placeString}!`;
-			if (true) {
+			msg = `You dig, and find a ${placeString}!`;
+			if (!activated) {
 				buttons = [
 					{
 						text: "Activate",
 						stage: "dig;activate"
 					}
 				]
-			} else if (!activated) {
+			} else {
 				buttons = [
 					{
 						text: "Ponder",
-						stage: "dig;followup"
+						stage: "dig;ponder"
 					}
 				]
 			}

@@ -8,6 +8,7 @@ export async function stats(request: GameRequest) : Promise<GameResponse> {
 		request.gameLore.personLore,
 		request.hashKey, request.playerData.level);
 
+		console.log("request player data is " + JSON.stringify(request.playerData))
 	return {
 		userId: request.userId,
 		blockMsg: {

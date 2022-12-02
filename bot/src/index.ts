@@ -8,7 +8,6 @@ import { handleInteraction } from "./handler";
 export interface Env {
 	BOT_PUBLIC_KEY: string;
 	HASH_KEY: string;
-	USE_PLAYER_STATE: boolean;
 	PLAYER_STATE: KVNamespace;
 }
 
@@ -38,7 +37,7 @@ export default {
 			if (signature != null && timestamp != null) {
 				const verified = verifyKey(body, signature, timestamp, env.BOT_PUBLIC_KEY);
 				if (verified) {
-					return getResponseJSON(request, env.USE_PLAYER_STATE ? env.PLAYER_STATE : null, hashKey);
+					return getResponseJSON(request, env.PLAYER_STATE, hashKey);
 				}
 			}
 			console.error("Could not verify request");
